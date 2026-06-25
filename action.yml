@@ -39,11 +39,12 @@ runs:
           printf 'extends:\n  - ["spotlight:oas", "recommended"]\n' > "$RULESET"
         fi
         CLI="@spotlight-rules/spotlight-cli@${{ inputs.version }}"
-        # Human-readable + GitHub annotations; fail per severity threshold.
+        # GitHub annotations (rendered inline on the PR) + the gate; fail per severity.
+        # (a single --format prints to stdout; multiple need matching --output.)
         npx -y "$CLI" lint ${{ inputs.files }} \
           --ruleset "$RULESET" \
           --fail-severity "${{ inputs.fail-severity }}" \
-          --format pretty --format github-actions
+          --format github-actions
     - name: SARIF report
       if: ${{ inputs.sarif != '' }}
       shell: bash
