@@ -1,0 +1,13 @@
+# .spotlight.yaml — your API governance ruleset. Extend the Spotlight built-ins and
+# add or override rules. See https://spotlight-rules.com/spec/
+extends:
+  - ["spotlight:oas", "recommended"]
+rules:
+  # example: require every operation to have an operationId
+  operation-operationId:
+    description: Every operation should have an operationId.
+    given: $.paths[*][get,put,post,delete,patch,options,head,trace]
+    severity: error
+    then:
+      field: operationId
+      function: truthy
