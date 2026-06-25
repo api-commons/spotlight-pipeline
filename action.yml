@@ -50,6 +50,8 @@ runs:
       run: |
         RULESET="${{ inputs.ruleset }}"
         [ -f "$RULESET" ] || { RULESET="$(mktemp).yaml"; printf 'extends:\n  - ["spotlight:oas", "recommended"]\n' > "$RULESET"; }
+        # --output writes the SARIF regardless of exit code; `|| true` so this
+        # reporting step never fails the job (the gate is the step above).
         npx -y "@spotlight-rules/spotlight-cli@${{ inputs.version }}" lint ${{ inputs.files }} \
-          --ruleset "$RULESET" --fail-severity off \
+          --ruleset "$RULESET" \
           --format sarif --output "${{ inputs.sarif }}" || true
