@@ -56,6 +56,23 @@ Copy the matching template from [`templates/`](./templates) — all run the same
 - **Azure DevOps** — [`templates/azure-pipelines.yml`](./templates/azure-pipelines.yml) (JUnit)
 - **AWS CodeBuild** — [`templates/aws-buildspec.yml`](./templates/aws-buildspec.yml) (JUnit report)
 
+## Governing agent skills (SKILL.md)
+
+Spotlight also lints **agent skills** (`SKILL.md`) — the cli parses the YAML frontmatter and
+the markdown body, and `spotlight:skill` governs name/description/license/allowed-tools plus
+body structure. Gate them in CI with [`templates/skill-governance.yml`](./templates/skill-governance.yml)
+and a ruleset extending `spotlight:skill` (see [`.spotlight-skill.example.yaml`](./.spotlight-skill.example.yaml)):
+
+```yaml
+- uses: api-commons/spotlight-pipeline@v1
+  with:
+    files: '**/SKILL.md'
+    ruleset: '.spotlight-skill.yaml'   # extends: [spotlight:skill]
+```
+
+> Skill linting ships with the Spotlight **1.0** cli release. Until then the action governs
+> OpenAPI/AsyncAPI/Arazzo; the skill template is ready to enable on release.
+
 ## Part of the Spotlight suite
 
 One engine (the CLI), one vocabulary (the [spec](https://spotlight-rules.com/spec/) +
