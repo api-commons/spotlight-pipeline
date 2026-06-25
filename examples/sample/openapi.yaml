@@ -1,0 +1,19 @@
+openapi: "3.0.3"
+info:
+  title: Sample
+  version: "1.0.0"
+  description: A sample API.
+  contact: { name: API Commons }
+servers:
+  - url: https://api.example.com
+tags:
+  - name: pets
+    description: Pet operations.
+paths:
+  /pets:
+    get:
+      description: List pets.
+      operationId: listPets
+      tags: [pets]
+      responses:
+        "200": { description: ok }
