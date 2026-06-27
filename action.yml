@@ -29,6 +29,7 @@ runs:
   using: composite
   steps:
     - name: Run Spotlight
+      id: gate
       shell: bash
       run: |
         set -euo pipefail
@@ -56,3 +57,21 @@ runs:
         npx -y "@spotlight-rules/spotlight-cli@${{ inputs.version }}" lint ${{ inputs.files }} \
           --ruleset "$RULESET" \
           --format sarif --output "${{ inputs.sarif }}" || true
+    - name: Governance services
+      if: always()
+      shell: bash
+      run: |
+        {
+          echo "---"
+          if [ "${{ steps.gate.outcome }}" = "failure" ]; then
+            echo "### 🟡 Spotlight governance gate failed"
+            echo ""
+            echo "Need help meeting this standard? **API Evangelist** offers governance services — expert reviews, custom rulesets, and consumer-governance setup."
+          else
+            echo "### ✓ Spotlight governance gate passed"
+            echo ""
+            echo "Want to go further — custom rulesets, OWASP / security packs, or governing the APIs you consume? **API Evangelist** can help."
+          fi
+          echo ""
+          echo "📧 **info@apievangelist.com** &middot; [Governance services →](https://spotlight-rules.com/services/)"
+        } >> "$GITHUB_STEP_SUMMARY"
